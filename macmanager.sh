@@ -98,7 +98,8 @@ display_mac_history() {
 # Function to change the MAC address
 change_to_random_mac() {
     # Generate a random MAC address
-    new_mac=$(printf '00:1D:%02X:%02X:%02X:%02X\n' $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256)))
+    # new_mac=$(printf '00:1D:%02X:%02X:%02X:%02X\n' $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256)))
+    new_mac=$(printf '%02X:%02X:%02X:%02X:%02X:%02X\n' $(( 2*(RANDOM%128) + 2 )) $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256)))
 
     # Disable the network interface
     ifconfig $interface down
