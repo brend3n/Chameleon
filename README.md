@@ -1,7 +1,7 @@
 <!-- # Chameleon: MAC Tweaker -->
 <p align=center>
   <br>
-  <img src="logo.png" alt="Chameleon" style="lemon" width="200">
+  <img src="assets/logo.png" alt="Chameleon" style="lemon" width="200">
   <br>
   <h2 align="center">Chameleon: MAC Address Modifier</h2>
   <br>
