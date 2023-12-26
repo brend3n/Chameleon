@@ -10,7 +10,12 @@ JSON_FILE="./.original_mac_addresses.json"
 interface=$1
 
 display_help() {
-    echo "Usage: $0 <options>"
+    echo ""
+    echo "Menu Mode"
+    echo "Usage: sudo $0 <interface>"
+    echo ""
+    echo "Command Line mode"
+    echo "Usage: sudo $0 [options...]"
     echo "Options:"
     echo "  -d <interface>        Display current MAC address"
     echo "  -r <interface>        Change to random MAC address"
@@ -19,6 +24,10 @@ display_help() {
     echo "  -p                    Display history"
     echo "  -s                    Show network interfaces"
     echo "  -h                    Display this help message"
+
+    echo ""
+    echo "Available network interfaces:"
+    show_network_interfaces
 }
 
 get_network_interfaces() {
@@ -148,8 +157,8 @@ change_to_random_mac() {
 
 # Check if the script is run as root
 if [[ $EUID -ne 0 ]]; then
-    echo "This script must be run as root."
-    echo "Usage: sudo $0 <interface>"
+    echo "This script must be run as root."    
+    display_help
     exit 1
 fi
 
@@ -160,7 +169,7 @@ fi
 
 # Check if the network interface is provided as an argument
 if [ -z "$1" ]; then
-    echo "Usage: sudo $0 <interface>"
+    display_help
     exit 1
 fi
 
