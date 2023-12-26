@@ -23,6 +23,17 @@ display_help() {
     echo "  -h                    Display this help message"
 }
 
+get_network_interfaces() {
+    ifconfig -s | awk '{print $1}' | tail -n +2
+}
+
+show_network_interfaces () {
+    # echo $(get_network_interfaces)
+    for if in $(get_network_interfaces); do
+        echo $if
+    done
+}
+
 # Function to display the current MAC address
 display_current_mac() {
     current_mac=$(ifconfig $interface | awk '/ether/ {print $2}')
@@ -150,7 +161,9 @@ fi
 
 
 # Save the original MAC address if its the first time running the script
+echo -e "Saving original MAC address"
 save_original_mac
+echo -e "Saved original MAC address"
 
 do_menu_mode() {
     # Infinite loop
@@ -161,7 +174,8 @@ do_menu_mode() {
         echo "3. Change to a specific MAC address"
         echo "4. Restore original MAC address"
         echo "5. Display MAC address change history"
-        echo "6. Exit"
+        echo "6. Show Network Interfaces"
+        echo "7. Exit"
 
         # Read user choice
         read -p "Enter your choice (1-6): " choice
@@ -174,7 +188,8 @@ do_menu_mode() {
             3) change_to_specific_mac ;;
             4) restore_original_mac ;;
             5) display_mac_history ;;
-            6) exit 0 ;;
+            6) show_network_interfaces;;
+            7) exit 0 ;;
             *) echo "Invalid choice. Please try again." ;;
         esac
         echo -e "\n\n"
