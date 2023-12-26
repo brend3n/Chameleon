@@ -1,8 +1,20 @@
-# MAC Address Changer
+<!-- # Chameleon: MAC Tweaker -->
+<p align=center>
+  <br>
+  <img src="logo.png" alt="Chameleon" style="lemon" width="200">
+  <br>
+  <h2 align="center">Chameleon: MAC Address Modifier</h2>
+  <br>
+</p>
+
+<meta name="description" content="The Chameleon: MAC Tweaker is a command-line tool that allows users to change their MAC address on a specified network interface. This tool is useful for scenarios where users need to modify their device's MAC address for privacy, security, or network troubleshooting purposes.">
+
+<meta name="keywords" content="MAC Address, MAC changer, MAC modify, MAC, Manager, Change, Edit, Media Access Control, Modify, modify, MAC address changer, MAC address modify, Change my MAC, Change MAC Address, Network Interface, Wireless Interface, Interface, Ethernet, IP, Windows, MAC, Security, Privacy, Pentesting, Safety, Safe, Secure, Testing, IT, Linux, Unix, MAC OS">
+
 
 ## Overview
 
-The MAC Address Changer is a command-line tool that allows users to change their MAC address on a specified network interface. This tool is useful for scenarios where users need to modify their device's MAC address for privacy, security, or network troubleshooting purposes.
+Chameleon is a command-line tool that allows users to change their MAC address on a specified network interface. This tool is useful for scenarios where users need to modify their device's MAC address for privacy, security, or network troubleshooting purposes.
 
 ## Features
 
@@ -26,34 +38,34 @@ There are two ways to use this tool:
 ## Command Line
 
 ```bash
-sudo ./mac-changer.sh <interface>
+sudo ./chameleon.sh <interface>
 ```
 ### Commands
 
 1. ### **Display Current MAC Address**
     ```bash
-    ./mac-changer.sh -d <interface>
+    ./chameleon.sh -d <interface>
     ```
 2. ### **Change to Random MAC Address**
     ```bash
-    ./mac-changer.sh -r <interface>
+    ./chameleon.sh -r <interface>
     ```
 3. ### **Change to Specific MAC Address**
     ```bash
-    ./mac-changer.sh -m <new_mac_address> -i <interface>
+    ./chameleon.sh -m <new_mac_address> -i <interface>
     ```
 4. ### **Restore Original MAC Address**
     ```bash
-    ./mac-changer.sh -o <interface>
+    ./chameleon.sh -o <interface>
     ```
 5. ### **Display MAC Address Change History**
     ```bash
-    ./mac-changer.sh -h
+    ./chameleon.sh -h
     ```
 ## Menu Mode
 
 ```bash
-sudo ./mac-changer.sh <interface>
+sudo ./chameleon.sh <interface>
 ```
 
 Replace \<interface> with the actual network interface you want to modify.
@@ -74,11 +86,11 @@ Replace \<interface> with the actual network interface you want to modify.
 
 ## Example
 ```bash
-sudo ./mac-changer.sh eth0
+sudo ./chameleon.sh eth0
 ```
 
 ## License
-This tool is distributed under the MIT License.
+This tool is distributed under the [MIT License](https://opensource.org/license/mit/).
 
 ## Disclaimer
 
