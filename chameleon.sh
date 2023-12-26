@@ -42,8 +42,7 @@ display_current_mac() {
 
 # Function to change the MAC address to a specific value
 change_to_specific_mac() {
-    # Read user input for the new MAC address
-    read -p "Enter the new MAC address: " new_mac
+    new_mac=$1
 
     # Validate the entered MAC address format
     if [[ ! $new_mac =~ ^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$ ]]; then
@@ -189,7 +188,11 @@ do_menu_mode() {
         case $choice in
             1) display_current_mac ;;
             2) change_to_random_mac ;;
-            3) change_to_specific_mac ;;
+            3)
+                # Read user input for the new MAC address
+                read -p "Enter the new MAC address: " new_mac
+                change_to_specific_mac $new_mac
+                ;;
             4) restore_original_mac ;;
             5) display_mac_history ;;
             6) show_network_interfaces;;
@@ -282,7 +285,7 @@ elif [ "$flag_s" = true ]; then
     show_network_interfaces
 elif [ "$flag_m" = true ]; then
     if [ "$flag_i" = true ]; then
-        change_to_specific_mac
+        change_to_specific_mac $new_mac_addr
     else
         echo -e "Missing arg for interface"
     fi 
