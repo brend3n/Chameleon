@@ -20,6 +20,7 @@ display_help() {
     echo "  -m <new_mac_address> -i <interface>  Change to specific MAC address"
     echo "  -o <interface>        Restore original MAC address"
     echo "  -p                    Display history"
+    echo "  -s                    Show network interfaces"
     echo "  -h                    Display this help message"
 }
 
@@ -28,9 +29,11 @@ get_network_interfaces() {
 }
 
 show_network_interfaces () {
-    # echo $(get_network_interfaces)
+    echo "Network Interfaces"
+    interface_count=1
     for if in $(get_network_interfaces); do
-        echo $if
+        echo "$interface_count: $if"
+        interface_count=$(($interface_count + 1))
     done
 }
 
@@ -71,7 +74,7 @@ change_to_specific_mac() {
 save_original_mac() {
     # Check if the flag file exists
     if [ -e "$OG_MAC_FILE_FLAG" ]; then
-        echo "Original MAC address saved."
+        # echo "Original MAC address saved."
         return
     fi
 
@@ -161,9 +164,7 @@ fi
 
 
 # Save the original MAC address if its the first time running the script
-echo -e "Saving original MAC address"
 save_original_mac
-echo -e "Saved original MAC address"
 
 do_menu_mode() {
     # Infinite loop
@@ -197,7 +198,7 @@ do_menu_mode() {
 }
 
 
-while getopts ":d:hpr:o:m:i:" opt; do
+while getopts ":d:hpsr:o:m:i:" opt; do
     case $opt in
         d)
             flag_d=true
@@ -225,6 +226,9 @@ while getopts ":d:hpr:o:m:i:" opt; do
             flag_i=true
             interface="$OPTARG"
             ;;
+        s)
+            flag_s=true            
+            ;;
         \?)
             echo "Invalid option: -$OPTARG"
             display_help
@@ -245,6 +249,7 @@ if [ "$flag_d" = true ] || \
    [ "$flag_r" = true ] || \
    [ "$flag_m" = true ] || \
    [ "$flag_o" = true ] || \
+   [ "$flag_s" = true ] || \
    [ "$flag_i" = true ]; then
     : # no-op
 else
@@ -262,6 +267,8 @@ elif [ "$flag_p" = true ]; then
     display_mac_history
 elif [ "$flag_h" = true ]; then
     display_help
+elif [ "$flag_s" = true ]; then
+    show_network_interfaces
 elif [ "$flag_m" = true ]; then
     if [ "$flag_i" = true ]; then
         change_to_specific_mac
