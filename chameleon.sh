@@ -3,11 +3,8 @@
 # Configuration file to store MAC address history
 CONFIG_FILE="./.macchanger_history"
 
-# File to store the original MAC address in write-only mode
-OG_MAC_FILE="./.original_mac_write_only"
-
-# File to store the original MAC address and flag
-OG_MAC_FILE_FLAG="./.original_mac_write_once.flag"
+# JSON file to store original MAC addresses for different interfaces
+JSON_FILE="./.original_mac_addresses.json"
 
 # Assign the provided interface to a variable
 interface=$1
@@ -70,36 +67,42 @@ change_to_specific_mac() {
     echo "$(date) $new_mac" >> $CONFIG_FILE
 }
 
-# Function to save the original MAC address to a file writable only once
-save_original_mac() {
-    # Check if the flag file exists
-    if [ -e "$OG_MAC_FILE_FLAG" ]; then
-        # echo "Original MAC address saved."
-        return
+# Function to save the original MAC address to the JSON file
+save_original_mac_to_json() {
+    original_mac=$(ifconfig $interface | awk '/ether/ {print $2}')
+    
+    # Read existing JSON file
+    json_data=""
+    local network_interface="null"
+    if [ -e "$JSON_FILE" ]; then
+        json_data=$(cat $JSON_FILE)
+        network_interface=$(jq -r --arg intf "$interface" '.[$intf]' $JSON_FILE)
     fi
 
-    # Read the original MAC address from the system
-    original_mac=$(ifconfig $interface | awk '/ether/ {print $2}')
+    # Does not exist, so write it
+    if [ "$network_interface" == "null" ]; then
+        # Update JSON data with the new original MAC address
+        json_data=$(echo $json_data | jq -n --arg interface "$interface" --arg original_mac "$original_mac" '.[$interface] = $original_mac')
+        echo "json_data: $json_data"
+        # Write back to the JSON file
+        echo $json_data >> $JSON_FILE
+    else
+        # Already exists so dont update it
+        # echo -e "Already exists"
+        # echo -e "$network_interface"
+        :
+    fi
 
-    # Save the original MAC address to the file
-    echo "$original_mac" > $OG_MAC_FILE
-    touch $OG_MAC_FILE_FLAG
-
-    # Display a confirmation message
-    echo "Original MAC address <${original_mac}> saved to $OG_MAC_FILE (write-only)."
-
-    # Set permissions to make the file writable only once
-    chmod a-w "$OG_MAC_FILE"
 }
 
 # Function to restore the original MAC address
 restore_original_mac() {
-    # Read the original MAC address from the write-only file
-    original_mac=$(cat $OG_MAC_FILE 2>/dev/null)
+    # Read the original MAC address from the JSON file
+    local original_mac=$(jq -r --arg intf "$interface" '.[$intf]' $JSON_FILE)
 
-    # Check if the write-only file exists and contains a MAC address
-    if [ -z "$original_mac" ]; then
-        echo "Original MAC address not found. Please save it first using option 4."
+    # Check if the JSON file contains the original MAC address for the specified interface
+    if [ "$original_mac" == "null" ]; then
+        echo "Original MAC address not found in the JSON file for interface $interface."
         return
     fi
 
@@ -164,7 +167,7 @@ fi
 
 
 # Save the original MAC address if its the first time running the script
-save_original_mac
+# save_original_mac
 
 do_menu_mode() {
     # Infinite loop
@@ -198,11 +201,13 @@ do_menu_mode() {
 }
 
 
-while getopts ":d:hpsr:o:m:i:" opt; do
+while getopts ":hpsd:r:o:m:i:" opt; do
     case $opt in
         d)
             flag_d=true
             interface="$OPTARG"
+            # Save the original MAC address if its the first time running the script
+            save_original_mac_to_json   
             ;;
         h)
             flag_h=true
@@ -213,6 +218,8 @@ while getopts ":d:hpsr:o:m:i:" opt; do
         r)
             flag_r=true
             interface="$OPTARG"
+            # Save the original MAC address if its the first time running the script
+            save_original_mac_to_json
             ;;
         m)
             flag_m=true
@@ -221,10 +228,14 @@ while getopts ":d:hpsr:o:m:i:" opt; do
         o)
             flag_o=true
             interface="$OPTARG"
+            # Save the original MAC address if its the first time running the script
+            save_original_mac_to_json
             ;;
         i)
             flag_i=true
             interface="$OPTARG"
+            # Save the original MAC address if its the first time running the script
+            save_original_mac_to_json
             ;;
         s)
             flag_s=true            

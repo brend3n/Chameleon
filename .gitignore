@@ -1,3 +1,4 @@
 .macchanger_history
 .original_mac_write_once.flag
 .original_mac_write_only
+.original_mac_addresses.json
