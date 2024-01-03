@@ -190,7 +190,7 @@ do_menu_mode() {
         echo "7. Exit"
 
         # Read user choice
-        read -p "Enter your choice (1-6): " choice
+        read -p "Enter your choice (1-7): " choice
 
         echo -e "\n\n"
         # Perform the selected action
